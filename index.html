@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>love - w2e</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="bg"></div>
+
+    <div class="lyrics">
+        <div class="line">사람 사이 사람</div>
+        <div class="line">바람 사이 바람</div>
+        <div class="line">각자의 염원이 바래고</div>
+        <div class="line">덧칠되어...</div>
+        <div class="line">발이 닿을 만큼</div>
+        <div class="line">굳어지면...</div>
+        <div class="line">비로소 내 세상이</div>
+        <div class="line">되어줘.</div>
+    </div>
+
+    <script>
+        const lines = document.querySelectorAll('.line');
+        
+        // ms durations for each line to stay on screen
+        const timings = [3500, 3500, 4500, 4000, 4000, 3500, 4000, 6000];
+        let currentIndex = 0;
+
+        function showNextLine() {
+            // clear active states
+            lines.forEach(line => line.classList.remove('active'));
+
+            if (currentIndex < lines.length) {
+                lines[currentIndex].classList.add('active');
+
+                setTimeout(() => {
+                    currentIndex++;
+                    showNextLine();
+                }, timings[currentIndex]);
+            } else {
+                // loop playlist
+                currentIndex = 0;
+                setTimeout(showNextLine, 1000);
+            }
+        }
+
+        // kick off animation
+        showNextLine();
+    </script>
+</body>
+</html>
