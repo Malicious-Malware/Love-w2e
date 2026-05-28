@@ -23,8 +23,18 @@
     <script>
         const lines = document.querySelectorAll('.line');
         
-        // Increased durations so the lyrics breathe more
-        const timings = [4500, 4800, 4200, 3200, 5200, 4500, 5200, 7000];
+        // Verified millisecond delays to match the studio track vocal cues
+        const timings = [
+            4200,  // Line 1: Fades in at 0:18 -> stays until 0:22.2
+            4300,  // Line 2: Fades in at 0:22.2 -> stays until 0:26.5
+            4800,  // Line 3: Fades in at 0:26.5 -> stays until 0:31.3
+            4000,  // Line 4: Fades in at 0:31.3 -> clear screen during drum cue at 0:35.3
+            5200,  // Line 5: Fades in at 0:37.2 (after brief pause) -> stays until 0:42.4
+            4300,  // Line 6: Fades in at 0:42.4 -> stays until 0:46.7
+            4800,  // Line 7: Fades in at 0:46.7 -> stays until 0:51.5
+            6500   // Line 8: Fades in at 0:51.5 -> lingering finish right before the main chorus at 0:58
+        ];
+        
         let currentIndex = 0;
 
         function showNextLine() {
@@ -38,8 +48,9 @@
                     showNextLine();
                 }, timings[currentIndex]);
             } else {
+                // Reset loop to begin again on restart
                 currentIndex = 0;
-                setTimeout(showNextLine, 1500); // slightly longer pause before it loops
+                setTimeout(showNextLine, 1500);
             }
         }
 
