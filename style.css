@@ -13,6 +13,13 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    cursor: pointer; /* Changes mouse to pointer to signal that it's clickable */
+    transition: background-color 0.4s ease;
+}
+
+/* Subtle dim indicator when the player is paused */
+body.paused-state {
+    background-color: #111;
 }
 
 .bg {
@@ -25,6 +32,11 @@ body {
     background-size: 600% 600%;
     animation: bgMove 14s ease-in-out infinite;
     z-index: -1;
+    transition: opacity 0.4s ease;
+}
+
+body.paused-state .bg {
+    opacity: 0.6; /* Dims the background slightly while paused */
 }
 
 @keyframes bgMove {
@@ -38,6 +50,7 @@ body {
     width: 100%;
     padding: 0 20px;
     letter-spacing: 0.5px;
+    user-select: none; /* Prevents text from being accidentally highlighted on click */
 }
 
 .line {
