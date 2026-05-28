@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>w2e - love. (MV Version)</title>
+    <title>w2e - love. (3-Minute MV Version)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -10,6 +10,7 @@
     <div class="bg"></div>
 
     <div class="lyrics">
+        <!-- Verse 1 -->
         <div class="line">사람 사이 사람</div>
         <div class="line">바람 사이 바람</div>
         <div class="line">각자의 염원이 바래고</div>
@@ -18,22 +19,105 @@
         <div class="line">굳어지면...</div>
         <div class="line">비로소 내 세상이</div>
         <div class="line">되어줘.</div>
+        
+        <!-- Verse 2 & Chorus (Extended to 3:00) -->
+        <div class="line">나의 일생에</div>
+        <div class="line">그 어떤 단어도</div>
+        <div class="line">나의 마음을</div>
+        <div class="line">대변할 수는 없겠지</div>
+        <div class="line">Oh, I might fail to express</div>
+        <div class="line">My mind to you...</div>
+        <div class="line">But my love is true...</div>
+        <div class="line">...</div>
+        <div class="line">Yeah, my love is true.</div>
     </div>
 
     <script>
         const lines = document.querySelectorAll('.line');
         const bg = document.querySelector('.bg');
         
-        const timings = [4200, 4300, 3200, 6800, 5300, 4300, 4900, 9500];
+        // Exact millisecond delays matched up to the 3:00 mark of the MV
+        const timings = [
+            4200,  // 사람 사이 사람
+            4300,  // 바람 사이 바람
+            3200,  // 각자의 염원이 바래고 (Fast cut)
+            6800,  // 덧칠되어... (Holds through drum break)
+            5300,  // 발이 닿을 만큼
+            4300,  // 굳어지면...
+            4900,  // 비로소 내 세상이
+            23000, // 되어줘. (Long instrumental gap leading into Verse 2)
+            4000,  // 나의 일생에
+            4500,  // 그 어떤 단어도
+            4500,  // 나의 마음을
+            10500, // 대변할 수는 없겠지 (Holds through the sax fill)
+            8500,  // Oh, I might fail to express
+            4000,  // My mind to you...
+            11000, // But my love is true... (Holds through long vocal transition)
+            32000, // ... (Instrumental break / Empty screen representation)
+            10000  // Yeah, my love is true. (Takes us straight to the 3-minute finish)
+        ];
         
-        let currentIndex = -1; // Starts at -1 to handle the initial intro delay smoothly
+        let currentIndex = -1; 
         let isPaused = false;
         let timerId = null;
         let startTime = null;
-        let remainingTime = 18500; // The initial 18.5s intro delay
+        let remainingTime = 18500; // Intro delay (0:18.5)
 
-        // A robust custom timer class to handle pausing and resuming mid-delay
         function CustomTimer(callback, delay) {
+            remainingTime = delay;
+            
+            this.pause = () => {
+                window.clearTimeout(timerId);
+                remainingTime -= Date.now() - startTime;
+            };
+
+            this.resume = () => {
+                startTime = Date.now();
+                window.clearTimeout(timerId);
+                timerId = window.setTimeout(callback, remainingTime);
+            };
+
+            this.resume();
+        }
+
+        function playNext() {
+            lines.forEach(line => line.classList.remove('active'));
+            currentIndex++;
+
+            if (currentIndex < lines.length) {
+                lines[currentIndex].classList.add('active');
+                
+                currentTimer = new CustomTimer(() => {
+                    playNext();
+                }, timings[currentIndex]);
+            } else {
+                currentIndex = -1;
+                currentTimer = new CustomTimer(() => {
+                    playNext();
+                }, 2000); 
+            }
+        }
+
+        let currentTimer = new CustomTimer(() => {
+            playNext();
+        }, remainingTime);
+
+        window.addEventListener('click', () => {
+            if (!isPaused) {
+                isPaused = true;
+                currentTimer.pause();
+                bg.style.animationPlayState = 'paused';
+                document.body.classList.add('paused-state');
+            } else {
+                isPaused = false;
+                currentTimer.resume();
+                bg.style.animationPlayState = 'running';
+                document.body.classList.remove('paused-state');
+            }
+        });
+    </script>
+</body>
+</html>
             remainingTime = delay;
             
             this.pause = () => {
