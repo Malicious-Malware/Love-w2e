@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>love - w2e</title>
+    <title>w2e - love.</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,12 +23,11 @@
     <script>
         const lines = document.querySelectorAll('.line');
         
-        // ms durations for each line to stay on screen
-        const timings = [3500, 3500, 4500, 4000, 4000, 3500, 4000, 6000];
+        // Increased durations so the lyrics breathe more
+        const timings = [4500, 4800, 5800, 5200, 5000, 4500, 5200, 7000];
         let currentIndex = 0;
 
         function showNextLine() {
-            // clear active states
             lines.forEach(line => line.classList.remove('active'));
 
             if (currentIndex < lines.length) {
@@ -39,13 +38,11 @@
                     showNextLine();
                 }, timings[currentIndex]);
             } else {
-                // loop playlist
                 currentIndex = 0;
-                setTimeout(showNextLine, 1000);
+                setTimeout(showNextLine, 1500); // slightly longer pause before it loops
             }
         }
 
-        // kick off animation
         showNextLine();
     </script>
 </body>
