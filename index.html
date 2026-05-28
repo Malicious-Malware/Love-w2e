@@ -14,7 +14,7 @@
         <div class="line">사람 사이 사람</div>
         <div class="line">바람 사이 바람</div>
         <div class="line">각자의 염원이 바래고</div>
-        <div class="line">덧칠되어...</div>
+        <div class="line">덧칠되어</div>
         
         <!-- Pre-Chorus 1 -->
         <div class="line">발이 닿을 만큼 굳어지면</div>
@@ -31,11 +31,19 @@
         <div class="line">사람 사이 사랑</div>
         <div class="line">모두 함께 모여서</div>
         <div class="line">영원을 바라고</div>
-        <div class="line">몸 마음 묻어내면...</div>
+        <div class="line">몸 마음 묻어내면</div>
         
         <!-- Pre-Chorus 2 -->
         <div class="line">비로소 우리의 세상이 완벽해</div>
-        <div class="line">사랑으로... 사랑으로...</div>
+        <div class="line">사랑으로</div>
+        <div class="line">사랑으로</div>
+
+        <!-- Verse 3 -->
+        <div class="line">나의 작은 마음도</div>
+        <div class="line">그 안에 작은 파도처럼</div>
+        <div class="line">부서지고 밀려와선</div>
+        <div class="line">네게 녹아내리고</div>
+        <div class="line">그제서야 보이는 나의 영원</div>
     </div>
 
     <script>
@@ -45,28 +53,34 @@
         const timings = [
             4200,  // 사람 사이 사람
             4300,  // 바람 사이 바람
-            3200,  // 각자의 염원이 바래고
-            5200,  // 덧칠되어...
+            3500,  // 각자의 염원이 바래고
+            6200,  // 덧칠되어
             5300,  // 발이 닿을 만큼 굳어지면
-            9500,  // 비로소 내 세상이 되어줘 (Holds through vocal echoes)
+            9800,  // 비로소 내 세상이 되어줘
             4100,  // 나의 작은 마음도
-            4300,  // 그 안에 자란 나음도
+            4200,  // 그 안에 자란 나음도
             4400,  // 부서지고 굳어지고
-            4400,  // 녹아내리고나면
-            23500, // 그제서야 보이는 나의 영원 (Holds through saxophone solo)
+            4300,  // 녹아내리고나면
+            23500, // 그제서야 보이는 나의 영원
             4100,  // 사람 사이 사랑
             4200,  // 모두 함께 모여서
             4200,  // 영원을 바라고
-            8500,  // 몸 마음 묻어내면...
-            5500,  // 비로소 우리의 세상이 완벽해
-            30000  // 사랑으로... 사랑으로... (Carries through the instrumental bridge past 3:00)
+            5500,  // 몸 마음 묻어내면
+            5800,  // 비로소 우리의 세상이 완벽해
+            3500,  // 사랑으로
+            16500, // 사랑으로
+            4100,  // 나의 작은 마음도
+            4200,  // 그 안에 작은 파도처럼
+            4400,  // 부서지고 밀려와선
+            4300,  // 네게 녹아내리고
+            25000  // 그제서야 보이는 나의 영원
         ];
         
         let currentIndex = -1; 
         let isPaused = false;
         let timerId = null;
         let startTime = null;
-        let remainingTime = 18500; // MV Intro Delay
+        let remainingTime = 18500; 
 
         function CustomTimer(callback, delay) {
             remainingTime = delay;
