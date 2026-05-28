@@ -22,40 +22,74 @@
 
     <script>
         const lines = document.querySelectorAll('.line');
+        const bg = document.querySelector('.bg');
         
-        // Exact millisecond gaps mapped directly to the YouTube MV timestamps
-        const timings = [
-            4200,  // Line 1: 0:18.5 -> 0:22.7
-            4300,  // Line 2: 0:22.7 -> 0:27.0
-            3200,  // Line 3: 0:27.0 -> 0:30.2 (Cuts away fast so Line 4 enters on cue)
-            6800,  // Line 4: 0:30.2 -> 0:37.0 (Holds beautifully through the MV drum break)
-            5300,  // Line 5: 0:37.0 -> 0:42.3
-            4300,  // Line 6: 0:42.3 -> 0:46.6
-            4900,  // Line 7: 0:46.6 -> 0:51.5
-            9500   // Line 8: 0:51.5 -> 1:01.0 (Outro holding until the scene changes)
-        ];
+        const timings = [4200, 4300, 3200, 6800, 5300, 4300, 4900, 9500];
         
-        let currentIndex = 0;
+        let currentIndex = -1; // Starts at -1 to handle the initial intro delay smoothly
+        let isPaused = false;
+        let timerId = null;
+        let startTime = null;
+        let remainingTime = 18500; // The initial 18.5s intro delay
 
-        function showNextLine() {
+        // A robust custom timer class to handle pausing and resuming mid-delay
+        function CustomTimer(callback, delay) {
+            remainingTime = delay;
+            
+            this.pause = () => {
+                window.clearTimeout(timerId);
+                remainingTime -= Date.now() - startTime;
+            };
+
+            this.resume = () => {
+                startTime = Date.now();
+                window.clearTimeout(timerId);
+                timerId = window.setTimeout(callback, remainingTime);
+            };
+
+            this.resume();
+        }
+
+        function playNext() {
+            // Hide previous lines
             lines.forEach(line => line.classList.remove('active'));
+            currentIndex++;
 
             if (currentIndex < lines.length) {
                 lines[currentIndex].classList.add('active');
-
-                setTimeout(() => {
-                    currentIndex++;
-                    showNextLine();
+                
+                // Track the current line delay
+                currentTimer = new CustomTimer(() => {
+                    playNext();
                 }, timings[currentIndex]);
             } else {
-                currentIndex = 0;
-                // 2-second delay before restarting from the 18.5-second intro mark
-                setTimeout(showNextLine, 2000);
+                // Loop behavior
+                currentIndex = -1;
+                currentTimer = new CustomTimer(() => {
+                    playNext();
+                }, 2000); // 2 second pause before looping back to intro
             }
         }
 
-        // Hard-synced to trigger exactly at the 18.5s mark of the video
-        setTimeout(showNextLine, 18500);
+        // Initialize the first timer window for the 18.5s intro
+        let currentTimer = new CustomTimer(() => {
+            playNext();
+        }, remainingTime);
+
+        // Click anywhere on the screen to play/pause toggle
+        window.addEventListener('click', () => {
+            if (!isPaused) {
+                isPaused = true;
+                currentTimer.pause();
+                bg.style.animationPlayState = 'paused'; // Freezes the gradient movement
+                document.body.classList.add('paused-state');
+            } else {
+                isPaused = false;
+                currentTimer.resume();
+                bg.style.animationPlayState = 'running'; // Resumes the gradient movement
+                document.body.classList.remove('paused-state');
+            }
+        });
     </script>
 </body>
 </html>
