@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Love - w2e</title>
+    <title>w2e - love.</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,53 +15,58 @@
         <div class="line">바람 사이 바람</div>
         <div class="line">각자의 염원이 바래고</div>
         <div class="line">덧칠되어...</div>
-        <div class="line">발이 닿을 만큼</div>
-        <div class="line">굳어지면...</div>
-        <div class="line">비로소 내 세상이</div>
-        <div class="line">되어줘.</div>
         
-        <!-- Verse 2 & Chorus (Extended to 3:00) -->
-        <div class="line">나의 일생에</div>
-        <div class="line">그 어떤 단어도</div>
-        <div class="line">나의 마음을</div>
-        <div class="line">대변할 수는 없겠지</div>
-        <div class="line">Oh, I might fail to express</div>
-        <div class="line">My mind to you...</div>
-        <div class="line">But my love is true...</div>
-        <div class="line">...</div>
-        <div class="line">Yeah, my love is true.</div>
+        <!-- Pre-Chorus 1 -->
+        <div class="line">발이 닿을 만큼 굳어지면</div>
+        <div class="line">비로소 내 세상이 되어줘</div>
+        
+        <!-- Chorus 1 -->
+        <div class="line">나의 작은 마음도</div>
+        <div class="line">그 안에 자란 나음도</div>
+        <div class="line">부서지고 굳어지고</div>
+        <div class="line">녹아내리고나면</div>
+        <div class="line">그제서야 보이는 나의 영원</div>
+        
+        <!-- Verse 2 -->
+        <div class="line">사람 사이 사랑</div>
+        <div class="line">모두 함께 모여서</div>
+        <div class="line">영원을 바라고</div>
+        <div class="line">몸 마음 묻어내면...</div>
+        
+        <!-- Pre-Chorus 2 -->
+        <div class="line">비로소 우리의 세상이 완벽해</div>
+        <div class="line">사랑으로... 사랑으로...</div>
     </div>
 
     <script>
         const lines = document.querySelectorAll('.line');
         const bg = document.querySelector('.bg');
         
-        // Exact millisecond delays matched up to the 3:00 mark of the MV
         const timings = [
             4200,  // 사람 사이 사람
             4300,  // 바람 사이 바람
-            3200,  // 각자의 염원이 바래고 (Fast cut)
-            6800,  // 덧칠되어... (Holds through drum break)
-            5300,  // 발이 닿을 만큼
-            4300,  // 굳어지면...
-            4900,  // 비로소 내 세상이
-            23000, // 되어줘. (Long instrumental gap leading into Verse 2)
-            4000,  // 나의 일생에
-            4500,  // 그 어떤 단어도
-            4500,  // 나의 마음을
-            10500, // 대변할 수는 없겠지 (Holds through the sax fill)
-            8500,  // Oh, I might fail to express
-            4000,  // My mind to you...
-            11000, // But my love is true... (Holds through long vocal transition)
-            32000, // ... (Instrumental break / Empty screen representation)
-            10000  // Yeah, my love is true. (Takes us straight to the 3-minute finish)
+            3200,  // 각자의 염원이 바래고
+            5200,  // 덧칠되어...
+            5300,  // 발이 닿을 만큼 굳어지면
+            9500,  // 비로소 내 세상이 되어줘 (Holds through vocal echoes)
+            4100,  // 나의 작은 마음도
+            4300,  // 그 안에 자란 나음도
+            4400,  // 부서지고 굳어지고
+            4400,  // 녹아내리고나면
+            23500, // 그제서야 보이는 나의 영원 (Holds through saxophone solo)
+            4100,  // 사람 사이 사랑
+            4200,  // 모두 함께 모여서
+            4200,  // 영원을 바라고
+            8500,  // 몸 마음 묻어내면...
+            5500,  // 비로소 우리의 세상이 완벽해
+            30000  // 사랑으로... 사랑으로... (Carries through the instrumental bridge past 3:00)
         ];
         
         let currentIndex = -1; 
         let isPaused = false;
         let timerId = null;
         let startTime = null;
-        let remainingTime = 18500; // Intro delay (0:18.5)
+        let remainingTime = 18500; // MV Intro Delay
 
         function CustomTimer(callback, delay) {
             remainingTime = delay;
