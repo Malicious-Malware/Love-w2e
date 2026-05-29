@@ -12,7 +12,7 @@
 
     <div class="lyrics">
 
-        <div class="line">♪ instrumental intro ♪</div>
+        <div class="line"></div>
 
         <div class="line">사람 사이 사람</div>
         <div class="line">바람 사이 바람</div>
@@ -54,8 +54,9 @@
     </div>
 
 <script>
-
-const lines = document.querySelectorAll(".line");
+    
+const lines = document.querySelectorAll('.line');
+const bg = document.querySelector('.bg');
 
 const timings = [
 
@@ -99,63 +100,92 @@ const timings = [
     15000
 ];
 
-let current = 0;
-let timeout = null;
+let currentIndex = 0;
+
+let timeout;
+let startTime;
+let remainingTime = timings[0];
+
+let paused = false;
 
 function showLine(index) {
 
     lines.forEach(line => {
-        line.classList.remove("active");
+        line.classList.remove('active');
     });
 
-    lines[index].classList.add("active");
+    lines[index].classList.add('active');
+
+    startTime = Date.now();
 
     timeout = setTimeout(() => {
 
-        current++;
+        currentIndex++;
 
-        if (current >= lines.length) {
-            current = 0;
+        if (currentIndex >= lines.length) {
+            currentIndex = 0;
         }
 
-        showLine(current);
+        remainingTime = timings[currentIndex];
 
-    }, timings[index]);
+        showLine(currentIndex);
+
+    }, remainingTime);
+
+}
+
+function pauseLyrics() {
+
+    clearTimeout(timeout);
+
+    remainingTime -= Date.now() - startTime;
+
+    bg.style.animationPlayState = 'paused';
+
+    document.body.classList.add('paused');
+
+}
+
+function resumeLyrics() {
+
+    bg.style.animationPlayState = 'running';
+
+    document.body.classList.remove('paused');
+
+    startTime = Date.now();
+
+    timeout = setTimeout(() => {
+
+        currentIndex++;
+
+        if (currentIndex >= lines.length) {
+            currentIndex = 0;
+        }
+
+        remainingTime = timings[currentIndex];
+
+        showLine(currentIndex);
+
+    }, remainingTime);
 
 }
 
 setTimeout(() => {
-    showLine(current);
+    showLine(currentIndex);
 }, 1000);
 
-let paused = false;
-
-window.addEventListener("click", () => {
+window.addEventListener('click', () => {
 
     paused = !paused;
 
-    const bg = document.querySelector(".background");
-
     if (paused) {
-
-        clearTimeout(timeout);
-
-        bg.style.animationPlayState = "paused";
-
-        document.body.classList.add("paused");
-
+        pauseLyrics();
     } else {
-
-        bg.style.animationPlayState = "running";
-
-        document.body.classList.remove("paused");
-
-        showLine(current);
-
+        resumeLyrics();
     }
 
 });
-
+    
 </script>
 
 </body>
