@@ -2,138 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>w2e - love.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>love. — wave to earth</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="bg"></div>
+    <div class="background"></div>
 
     <div class="lyrics">
-        <!-- Verse 1 -->
+
+        <div class="line">♪ instrumental intro ♪</div>
+
         <div class="line">사람 사이 사람</div>
         <div class="line">바람 사이 바람</div>
         <div class="line">각자의 염원이 바래고</div>
         <div class="line">덧칠되어</div>
-        
-        <!-- Pre-Chorus 1 -->
+
+        <div class="line">ooh...</div>
         <div class="line">발이 닿을 만큼 굳어지면</div>
+
+        <div class="line">ah-oh...</div>
         <div class="line">비로소 내 세상이 되어줘</div>
-        
-        <!-- Chorus 1 -->
+
         <div class="line">나의 작은 마음도</div>
         <div class="line">그 안에 자란 나음도</div>
         <div class="line">부서지고 굳어지고</div>
         <div class="line">녹아내리고나면</div>
         <div class="line">그제서야 보이는 나의 영원</div>
-        
-        <!-- Verse 2 -->
+
+        <div class="line">♪ instrumental fill ♪</div>
+
         <div class="line">사람 사이 사랑</div>
         <div class="line">모두 함께 모여서</div>
         <div class="line">영원을 바라고</div>
         <div class="line">몸 마음 묻어내면</div>
-        
-        <!-- Pre-Chorus 2 -->
+
         <div class="line">비로소 우리의 세상이 완벽해</div>
+
         <div class="line">사랑으로</div>
         <div class="line">사랑으로</div>
 
-        <!-- Verse 3 -->
         <div class="line">나의 작은 마음도</div>
         <div class="line">그 안에 작은 파도처럼</div>
         <div class="line">부서지고 밀려와선</div>
         <div class="line">네게 녹아내리고</div>
         <div class="line">그제서야 보이는 나의 영원</div>
+
+        <div class="line">♪ outro ♪</div>
+
     </div>
 
-    <script>
-        const lines = document.querySelectorAll('.line');
-        const bg = document.querySelector('.bg');
-        
-        const timings = [
-            4200,  // 사람 사이 사람
-            4300,  // 바람 사이 바람
-            4200,  // 각자의 염원이 바래고
-            5500,  // 덧칠되어
-            5300,  // 발이 닿을 만큼 굳어지면
-            9800,  // 비로소 내 세상이 되어줘
-            4100,  // 나의 작은 마음도
-            4200,  // 그 안에 자란 나음도
-            4400,  // 부서지고 굳어지고
-            4300,  // 녹아내리고나면
-            23500, // 그제서야 보이는 나의 영원
-            4100,  // 사람 사이 사랑
-            4200,  // 모두 함께 모여서
-            4200,  // 영원을 바라고
-            5500,  // 몸 마음 묻어내면
-            5800,  // 비로소 우리의 세상이 완벽해
-            3500,  // 사랑으로
-            16500, // 사랑으로
-            4100,  // 나의 작은 마음도
-            4200,  // 그 안에 작은 파도처럼
-            4400,  // 부서지고 밀려와선
-            4300,  // 네게 녹아내리고
-            25000  // 그제서야 보이는 나의 영원
-        ];
-        
-        let currentIndex = -1; 
-        let isPaused = false;
-        let timerId = null;
-        let startTime = null;
-        let remainingTime = 18500; 
+<script>
 
-        function CustomTimer(callback, delay) {
-            remainingTime = delay;
-            
-            this.pause = () => {
-                window.clearTimeout(timerId);
-                remainingTime -= Date.now() - startTime;
-            };
+const lines = document.querySelectorAll(".line");
 
-            this.resume = () => {
-                startTime = Date.now();
-                window.clearTimeout(timerId);
-                timerId = window.setTimeout(callback, remainingTime);
-            };
+const timings = [
 
-            this.resume();
+    12500,
+
+    3600,
+    3400,
+    4700,
+    3000,
+
+    1800,
+    5000,
+
+    1600,
+    6200,
+
+    3600,
+    3900,
+    4300,
+    4700,
+    8200,
+
+    6200,
+
+    3500,
+    4200,
+    4200,
+    5200,
+
+    6200,
+
+    3200,
+    7200,
+
+    3600,
+    4200,
+    4300,
+    4500,
+    9500,
+
+    15000
+];
+
+let current = 0;
+let timeout = null;
+
+function showLine(index) {
+
+    lines.forEach(line => {
+        line.classList.remove("active");
+    });
+
+    lines[index].classList.add("active");
+
+    timeout = setTimeout(() => {
+
+        current++;
+
+        if (current >= lines.length) {
+            current = 0;
         }
 
-        function playNext() {
-            lines.forEach(line => line.classList.remove('active'));
-            currentIndex++;
+        showLine(current);
 
-            if (currentIndex < lines.length) {
-                lines[currentIndex].classList.add('active');
-                
-                currentTimer = new CustomTimer(() => {
-                    playNext();
-                }, timings[currentIndex]);
-            } else {
-                currentIndex = -1;
-                currentTimer = new CustomTimer(() => {
-                    playNext();
-                }, 2000); 
-            }
-        }
+    }, timings[index]);
 
-        let currentTimer = new CustomTimer(() => {
-            playNext();
-        }, remainingTime);
+}
 
-        window.addEventListener('click', () => {
-            if (!isPaused) {
-                isPaused = true;
-                currentTimer.pause();
-                bg.style.animationPlayState = 'paused';
-                document.body.classList.add('paused-state');
-            } else {
-                isPaused = false;
-                currentTimer.resume();
-                bg.style.animationPlayState = 'running';
-                document.body.classList.remove('paused-state');
-            }
-        });
-    </script>
+setTimeout(() => {
+    showLine(current);
+}, 1000);
+
+let paused = false;
+
+window.addEventListener("click", () => {
+
+    paused = !paused;
+
+    const bg = document.querySelector(".background");
+
+    if (paused) {
+
+        clearTimeout(timeout);
+
+        bg.style.animationPlayState = "paused";
+
+        document.body.classList.add("paused");
+
+    } else {
+
+        bg.style.animationPlayState = "running";
+
+        document.body.classList.remove("paused");
+
+        showLine(current);
+
+    }
+
+});
+
+</script>
+
 </body>
 </html>
