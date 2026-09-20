@@ -56,7 +56,7 @@
 <script>
     
 const lines = document.querySelectorAll('.line');
-const bg = document.querySelector('.bg');
+const bg = document.querySelector('.background');
 
 const timings = [
 
@@ -101,73 +101,62 @@ const timings = [
 ];
 
 let currentIndex = 0;
-
 let timeout;
 let startTime;
 let remainingTime = timings[0];
-
 let paused = false;
 
 function showLine(index) {
+    if (!lines[index]) return;
 
     lines.forEach(line => {
         line.classList.remove('active');
     });
 
-    lines[index].classList.add('active');
-
+    currentIndex = index;
+    lines[currentIndex].classList.add('active');
     startTime = Date.now();
+    remainingTime = timings[currentIndex] ?? timings[0];
 
+    clearTimeout(timeout);
     timeout = setTimeout(() => {
-
-        currentIndex++;
-
-        if (currentIndex >= lines.length) {
-            currentIndex = 0;
-        }
-
-        remainingTime = timings[currentIndex];
-
-        showLine(currentIndex);
-
+        const nextIndex = (currentIndex + 1) % lines.length;
+        showLine(nextIndex);
     }, remainingTime);
-
 }
 
 function pauseLyrics() {
-
     clearTimeout(timeout);
 
-    remainingTime -= Date.now() - startTime;
+    if (startTime) {
+        remainingTime = Math.max(0, remainingTime - (Date.now() - startTime));
+    }
 
-    bg.style.animationPlayState = 'paused';
+    if (bg) {
+        bg.style.animationPlayState = 'paused';
+    }
 
     document.body.classList.add('paused');
-
 }
 
 function resumeLyrics() {
-
-    bg.style.animationPlayState = 'running';
+    if (bg) {
+        bg.style.animationPlayState = 'running';
+    }
 
     document.body.classList.remove('paused');
 
+    if (remainingTime <= 0) {
+        showLine((currentIndex + 1) % lines.length);
+        return;
+    }
+
     startTime = Date.now();
-
+    clearTimeout(timeout);
     timeout = setTimeout(() => {
-
-        currentIndex++;
-
-        if (currentIndex >= lines.length) {
-            currentIndex = 0;
-        }
-
-        remainingTime = timings[currentIndex];
-
-        showLine(currentIndex);
-
+        const nextIndex = (currentIndex + 1) % lines.length;
+        showLine(nextIndex);
     }, remainingTime);
-
 }
 
 setTimeout(() => {
@@ -175,7 +164,6 @@ setTimeout(() => {
 }, 1000);
 
 window.addEventListener('click', () => {
-
     paused = !paused;
 
     if (paused) {
@@ -183,7 +171,6 @@ window.addEventListener('click', () => {
     } else {
         resumeLyrics();
     }
-
 });
     
 </script>
