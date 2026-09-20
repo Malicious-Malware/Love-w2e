@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <div class="background">love. — wave to earth</div>
+    <div class="background"></div>
 
     <div class="lyrics">
 
@@ -53,116 +53,114 @@
 
     </div>
 
-    <script>
-        const lines = [...document.querySelectorAll('.line')];
-        const bg = document.querySelector('.background');
+<script>
+    const lines = document.querySelectorAll('.line');
+    const bg = document.querySelector('.background');
 
-        const timings = [
-            12500,
-            3600,
-            3400,
-            4700,
-            3000,
-            1800,
-            5000,
-            1600,
-            6200,
-            3600,
-            3900,
-            4300,
-            4700,
-            8200,
-            6200,
-            3500,
-            4200,
-            4200,
-            5200,
-            6200,
-            3200,
-            7200,
-            3600,
-            4200,
-            4300,
-            4500,
-            9500,
-            15000
-        ];
+    const timings = [
+        12500,
+        3600,
+        3400,
+        4700,
+        3000,
+        1800,
+        5000,
+        1600,
+        6200,
+        3600,
+        3900,
+        4300,
+        4700,
+        8200,
+        6200,
+        3500,
+        4200,
+        4200,
+        5200,
+        6200,
+        3200,
+        7200,
+        3600,
+        4200,
+        4300,
+        4500,
+        9500,
+        15000
+    ];
 
-        let currentIndex = 0;
-        let timeoutId = null;
-        let startTime = 0;
-        let remainingTime = timings[0] ?? 3000;
-        let paused = false;
+    let currentIndex = 0;
+    let timeout;
+    let startTime;
+    let remainingTime = timings[0];
+    let paused = false;
 
-        function showLine(index) {
-            const safeIndex = Number.isInteger(index) ? index : 0;
-            if (!lines[safeIndex]) return;
+    function showLine(index) {
+        if (!lines[index]) return;
 
-            lines.forEach((line) => line.classList.remove('active'));
-
-            currentIndex = safeIndex;
-            lines[currentIndex].classList.add('active');
-            startTime = Date.now();
-            remainingTime = timings[currentIndex] ?? timings[0] ?? 3000;
-
-            if (timeoutId) clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                const nextIndex = (currentIndex + 1) % lines.length;
-                showLine(nextIndex);
-            }, remainingTime);
-        }
-
-        function pauseLyrics() {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-                timeoutId = null;
-            }
-
-            if (startTime) {
-                remainingTime = Math.max(0, remainingTime - (Date.now() - startTime));
-            }
-
-            if (bg) {
-                bg.style.animationPlayState = 'paused';
-            }
-
-            document.body.classList.add('paused');
-        }
-
-        function resumeLyrics() {
-            if (bg) {
-                bg.style.animationPlayState = 'running';
-            }
-
-            document.body.classList.remove('paused');
-
-            if (remainingTime <= 50) {
-                showLine((currentIndex + 1) % lines.length);
-                return;
-            }
-
-            startTime = Date.now();
-            if (timeoutId) clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                const nextIndex = (currentIndex + 1) % lines.length;
-                showLine(nextIndex);
-            }, remainingTime);
-        }
-
-        setTimeout(() => {
-            showLine(currentIndex);
-        }, 1000);
-
-        window.addEventListener('click', () => {
-            paused = !paused;
-
-            if (paused) {
-                pauseLyrics();
-            } else {
-                resumeLyrics();
-            }
+        lines.forEach(line => {
+            line.classList.remove('active');
         });
-    </script>
+
+        currentIndex = index;
+        lines[currentIndex].classList.add('active');
+        startTime = Date.now();
+        remainingTime = timings[currentIndex] ?? timings[0];
+
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const nextIndex = (currentIndex + 1) % lines.length;
+            showLine(nextIndex);
+        }, remainingTime);
+    }
+
+    function pauseLyrics() {
+        clearTimeout(timeout);
+
+        if (startTime) {
+            remainingTime = Math.max(0, remainingTime - (Date.now() - startTime));
+        }
+
+        if (bg) {
+            bg.style.animationPlayState = 'paused';
+        }
+
+        document.body.classList.add('paused');
+    }
+
+    function resumeLyrics() {
+        if (bg) {
+            bg.style.animationPlayState = 'running';
+        }
+
+        document.body.classList.remove('paused');
+
+        if (remainingTime <= 0) {
+            showLine((currentIndex + 1) % lines.length);
+            return;
+        }
+
+        startTime = Date.now();
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            const nextIndex = (currentIndex + 1) % lines.length;
+            showLine(nextIndex);
+        }, remainingTime);
+    }
+
+    setTimeout(() => {
+        showLine(currentIndex);
+    }, 1000);
+
+    window.addEventListener('click', () => {
+        paused = !paused;
+
+        if (paused) {
+            pauseLyrics();
+        } else {
+            resumeLyrics();
+        }
+    });
+</script>
 
 </body>
 </html>
