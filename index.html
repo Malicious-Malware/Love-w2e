@@ -8,49 +8,37 @@
 </head>
 <body>
 
-    <div class="background"></div>
+    <div class="background" aria-hidden="true"></div>
 
     <div class="lyrics">
-
         <div class="line"></div>
-
         <div class="line">사람 사이 사람</div>
         <div class="line">바람 사이 바람</div>
         <div class="line">각자의 염원이 바래고</div>
         <div class="line">덧칠되어</div>
-
         <div class="line">ooh...</div>
         <div class="line">발이 닿을 만큼 굳어지면</div>
-
         <div class="line">ah-oh...</div>
         <div class="line">비로소 내 세상이 되어줘</div>
-
         <div class="line">나의 작은 마음도</div>
         <div class="line">그 안에 자란 나음도</div>
         <div class="line">부서지고 굳어지고</div>
         <div class="line">녹아내리고나면</div>
         <div class="line">그제서야 보이는 나의 영원</div>
-
         <div class="line">♪ instrumental fill ♪</div>
-
         <div class="line">사람 사이 사랑</div>
         <div class="line">모두 함께 모여서</div>
         <div class="line">영원을 바라고</div>
         <div class="line">몸 마음 묻어내면</div>
-
         <div class="line">비로소 우리의 세상이 완벽해</div>
-
         <div class="line">사랑으로</div>
         <div class="line">사랑으로</div>
-
         <div class="line">나의 작은 마음도</div>
         <div class="line">그 안에 작은 파도처럼</div>
         <div class="line">부서지고 밀려와선</div>
         <div class="line">네게 녹아내리고</div>
         <div class="line">그제서야 보이는 나의 영원</div>
-
         <div class="line">♪ outro ♪</div>
-
     </div>
 
 <script>
@@ -58,34 +46,9 @@
     const bg = document.querySelector('.background');
 
     const timings = [
-        12500,
-        3600,
-        3400,
-        4700,
-        3000,
-        1800,
-        5000,
-        1600,
-        6200,
-        3600,
-        3900,
-        4300,
-        4700,
-        8200,
-        6200,
-        3500,
-        4200,
-        4200,
-        5200,
-        6200,
-        3200,
-        7200,
-        3600,
-        4200,
-        4300,
-        4500,
-        9500,
-        15000
+        12500, 3600, 3400, 4700, 3000, 1800, 5000, 1600, 6200,
+        3600, 3900, 4300, 4700, 8200, 6200, 3500, 4200, 4200,
+        5200, 6200, 3200, 7200, 3600, 4200, 4300, 4500, 9500, 15000
     ];
 
     let currentIndex = 0;
@@ -97,10 +60,7 @@
     function showLine(index) {
         if (!lines[index]) return;
 
-        lines.forEach(line => {
-            line.classList.remove('active');
-        });
-
+        lines.forEach(line => line.classList.remove('active'));
         currentIndex = index;
         lines[currentIndex].classList.add('active');
         startTime = Date.now();
@@ -108,8 +68,7 @@
 
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            const nextIndex = (currentIndex + 1) % lines.length;
-            showLine(nextIndex);
+            showLine((currentIndex + 1) % lines.length);
         }, remainingTime);
     }
 
@@ -120,18 +79,12 @@
             remainingTime = Math.max(0, remainingTime - (Date.now() - startTime));
         }
 
-        if (bg) {
-            bg.style.animationPlayState = 'paused';
-        }
-
+        if (bg) bg.style.animationPlayState = 'paused';
         document.body.classList.add('paused');
     }
 
     function resumeLyrics() {
-        if (bg) {
-            bg.style.animationPlayState = 'running';
-        }
-
+        if (bg) bg.style.animationPlayState = 'running';
         document.body.classList.remove('paused');
 
         if (remainingTime <= 0) {
@@ -142,18 +95,14 @@
         startTime = Date.now();
         clearTimeout(timeout);
         timeout = setTimeout(() => {
-            const nextIndex = (currentIndex + 1) % lines.length;
-            showLine(nextIndex);
+            showLine((currentIndex + 1) % lines.length);
         }, remainingTime);
     }
 
-    setTimeout(() => {
-        showLine(currentIndex);
-    }, 1000);
+    setTimeout(() => showLine(currentIndex), 1000);
 
-    window.addEventListener('click', () => {
+    document.addEventListener('click', () => {
         paused = !paused;
-
         if (paused) {
             pauseLyrics();
         } else {
