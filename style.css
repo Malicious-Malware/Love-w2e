@@ -5,19 +5,12 @@
 }
 
 body {
+    min-height: 100vh;
     overflow: hidden;
-    background: black;
-    color: white;
+    background: #000;
+    color: #fff;
     font-family: Arial, sans-serif;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    height: 100vh;
-
     cursor: pointer;
-
     transition: background 0.4s ease;
 }
 
@@ -28,83 +21,54 @@ body.paused {
 .background {
     position: fixed;
     inset: 0;
-
-    background:
-    linear-gradient(
-        270deg,
-        #ff4e50,
-        #1e90ff,
-        #8e44ad,
-        #ff758c
-    );
-
-    background-size: 700% 700%;
-
-    animation: moveBg 18s ease infinite;
-
     z-index: -1;
-
+    background: linear-gradient(270deg, #ff4e50, #1e90ff, #8e44ad, #ff758c);
+    background-size: 700% 700%;
+    animation: moveBg 18s ease infinite;
     opacity: 0.9;
+    transition: opacity 0.4s ease;
+}
+
+.background.finished {
+    opacity: 0.35;
 }
 
 @keyframes moveBg {
-
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 .lyrics {
-    position: relative;
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
+    padding: 1.5rem;
     text-align: center;
-    padding: 20px;
 }
 
 .line {
-
     position: absolute;
-
-    top: 50%;
     left: 50%;
-
-    transform:
-    translate(-50%, -50%);
-
-    width: 100%;
-
+    top: 50%;
+    width: min(90vw, 60rem);
+    margin: 0;
     opacity: 0;
-
-    font-size: 34px;
+    transform: translate(-50%, -50%);
+    font-size: clamp(1.25rem, 3.5vw, 2.125rem);
     font-weight: 300;
-
+    line-height: 1.5;
     letter-spacing: 0.5px;
-
-    transition:
-    opacity 1.6s ease,
-    transform 1.6s ease;
-
+    text-align: center;
     user-select: none;
-
-    text-shadow:
-    0 0 10px rgba(0,0,0,0.4);
-
+    text-shadow: 0 0 10px rgb(0 0 0 / 40%);
+    transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
 .line.active {
-
     opacity: 1;
-
-    transform:
-    translate(-50%, -54%);
-
+    transform: translate(-50%, -50%);
 }
